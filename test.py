@@ -2,7 +2,7 @@ import cv2
 import numpy as np 
 
 
-camera_params = np.load("ik_cam(640x480).npz")
+camera_params = np.load("ik_cam(480x360).npz")
 
 newcameramtx = camera_params["newcameramtx"]
 roi = camera_params["roi"]
@@ -17,9 +17,11 @@ if __name__ == "__main__":
 
     while RUN:
         ret, img = stream.read()
+        img = cv2.resize(img, (480, 360))
         undistort = cv2.undistort(img, mtx, dist, None, newcameramtx)
         x,y,w,h = roi
         undistort2 = undistort[y:y+h, x:x+w]
+        print(dist)
         if ret:
             cv2.imshow('undistort', undistort)
             cv2.imshow('undistort2', undistort2)
